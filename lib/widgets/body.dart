@@ -11,17 +11,50 @@ class Body extends StatelessWidget {
     return Stack(
       children: [
         WebsafeSvg.asset('assets/icons/bg.svg', fit: BoxFit.fill),
-        Column(
-          children: [
-            SafeArea(
-              child: Padding(
+        SafeArea(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: kDefaultPadding),
                 child: ProgressBar(),
               ),
-            ),
-          ],
-        )
+              const SizedBox(height: kDefaultPadding),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: kDefaultPadding),
+                child: Text.rich(
+                  TextSpan(
+                    text: "Question 1",
+                    style: Theme.of(context)
+                        .textTheme
+                        .headlineMedium
+                        ?.copyWith(color: kSecondaryColor),
+                    children: [
+                      TextSpan(
+                        text: "/10",
+                        style: Theme.of(context)
+                            .textTheme
+                            .headlineSmall
+                            ?.copyWith(color: kSecondaryColor),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const Divider(
+                thickness: 1.5,
+              ),
+              const SizedBox(height: kDefaultPadding),
+              Expanded(
+                child: PageView.builder(
+                  itemBuilder: (context, index) => QuestionCard(),
+                ),
+              )
+            ],
+          ),
+        ),
       ],
     );
   }

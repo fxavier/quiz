@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:quiz/screens/screens.dart';
+import 'package:quiz/store/question_store.dart';
+import 'package:get_it/get_it.dart';
 
 void main() {
   runApp(const MyApp());

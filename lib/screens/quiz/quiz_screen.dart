@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:quiz/widgets/widgets.dart';
-import 'package:websafe_svg/websafe_svg.dart';
 
 class QuizScreen extends StatelessWidget {
   const QuizScreen({super.key});

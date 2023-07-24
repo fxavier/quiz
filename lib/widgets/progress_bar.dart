@@ -1,11 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:quiz/constants.dart';
+import 'package:quiz/store/question_store.dart';
 import 'package:websafe_svg/websafe_svg.dart';
 
-class ProgressBar extends StatelessWidget {
+class ProgressBar extends StatefulWidget {
   const ProgressBar({
     super.key,
   });
+
+  @override
+  State<ProgressBar> createState() => _ProgressBarState();
+}
+
+class _ProgressBarState extends State<ProgressBar>
+    with TickerProviderStateMixin {
+  late final QuestionStore questionStore;
+
+  @override
+  void initState() {
+    super.initState();
+    questionStore = QuestionStore(this);
+    questionStore.onInit();
+  }
+
+  @override
+  void dispose() {
+    questionStore.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,28 +44,34 @@ class ProgressBar extends StatelessWidget {
       ),
       child: Stack(
         children: [
-          LayoutBuilder(
-            builder: (context, constraints) => Container(
-              width: constraints.maxWidth * 0.5,
-              decoration: BoxDecoration(
-                gradient: kPrimaryGradient,
-                borderRadius: BorderRadius.circular(50),
+          Observer(builder: (_) {
+            return LayoutBuilder(
+              builder: (context, constraints) => Container(
+                width: constraints.maxWidth *
+                    (questionStore.animation?.value ?? 0.0),
+                decoration: BoxDecoration(
+                  gradient: kPrimaryGradient,
+                  borderRadius: BorderRadius.circular(50),
+                ),
               ),
-            ),
-          ),
-          Positioned.fill(
-            child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: kDefaultPadding * 0.5),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text("18 sec"),
-                  WebsafeSvg.asset('assets/icons/clock.svg'),
-                ],
+            );
+          }),
+          Observer(builder: (_) {
+            return Positioned.fill(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: kDefaultPadding * 0.5),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                        "${((questionStore.animation?.value ?? 0.0) * 60).round()} sec"),
+                    WebsafeSvg.asset('assets/icons/clock.svg'),
+                  ],
+                ),
               ),
-            ),
-          ),
+            );
+          }),
         ],
       ),
     );
